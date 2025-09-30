@@ -9,14 +9,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -28,14 +29,4 @@ public class User {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    public User() {}
-
-    public User(String email, String name, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 }
