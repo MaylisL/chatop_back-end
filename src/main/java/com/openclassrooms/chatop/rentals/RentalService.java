@@ -5,6 +5,7 @@ import com.openclassrooms.chatop.exception.ResourceNotFoundException;
 import com.openclassrooms.chatop.users.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +33,13 @@ public class RentalService {
         rentalRepository.save(rental);
     }
 
-    public void updateRental(Integer rentalId, String name, Double surface, Double price, String description) {
+    public void updateRental(Integer rentalId, String name, Double surface, Double price, String description, Integer connectedUserId) {
         Rental rental = rentalRepository.findById(rentalId)
                 .orElseThrow(() -> new ResourceNotFoundException("Rental not found with id " + rentalId));
+
+        if (!rental.getOwner().getId().equals(connectedUserId)) {
+            throw new AccessDeniedException("You are not allowed to update this rental");
+        }
 
         rental.setName(name);
         rental.setSurface(surface);

@@ -83,9 +83,12 @@ public class RentalController {
             @RequestParam("surface") Double surface,
             @RequestParam("price") Double price,
             @RequestParam("description") String description,
-            @PathVariable("id") Integer rentalId
+            @PathVariable("id") Integer rentalId,
+            @AuthenticationPrincipal Jwt jwt
     ) throws IOException {
-        rentalService.updateRental(rentalId, name, surface, price, description);
+
+        Integer connectedUserId = ((Long) jwt.getClaim("userId")).intValue();
+        rentalService.updateRental(rentalId, name, surface, price, description, connectedUserId);
 
         return ResponseEntity.ok(new MessageResponse("Rental updated !"));
     }
